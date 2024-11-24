@@ -12,7 +12,7 @@ pygame.init()
 
 # b_bishop   0
 # b_king     1
-# b_knight   2 
+# b_knight   2
 # b_pawn     3
 # b_queen    4
 # b_rook     5
@@ -30,33 +30,34 @@ mouse_button_down: pygame.event.Event = None
 clock: pygame.time.Clock = pygame.time.Clock()
 mainWindows: Windows = Windows()
 
+
 def reload_images(board_size):
-	lista = []
-	size_cal = round(board_size / 8)
+    lista = []
+    size_cal = round(board_size / 8)
 
-	for item in lista_img:
-		lista.append(pygame.transform.smoothscale(item, (size_cal, size_cal)))
+    for item in lista_img:
+        lista.append(pygame.transform.smoothscale(item, (size_cal, size_cal)))
 
-	return lista
+    return lista
+
 
 while running:
-	for event in pygame.event.get():
-		# print(pygame.event.event_name(event.type))
-		if event.type == QUIT:
-			running = False
-		if event.type == MOUSEBUTTONDOWN:
-			mouse_button_down = event
-			# print(mouse_button_down)
+    for event in pygame.event.get():
+        # print(pygame.event.event_name(event.type))
+        if event.type == QUIT:
+            running = False
+        if event.type == MOUSEBUTTONDOWN:
+            mouse_button_down = event
+            # print(mouse_button_down)
 
-	mainWindows.check_windows_resize()
-	mainWindows.check_click(mouse_button_down)
-	mainWindows.draw()
+    mainWindows.check_windows_resize()
+    mainWindows.check_click(mouse_button_down)
+    mainWindows.draw()
 
+    mouse_button_down = None
 
-	mouse_button_down = None
+    pygame.display.flip()
 
-	pygame.display.flip()
-
-	clock.tick(120)
+    clock.tick(120)
 
 pygame.quit()
