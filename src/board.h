@@ -1,7 +1,12 @@
+#include <SDL2/SDL_surface.h>
+
+typedef struct Board_Private Board_Private;
+
 typedef struct Board {
-  void (*Draw)();
-  void (*Update)();
+  void (*Draw)(struct Board *, SDL_Surface *);
+  void (*Update)(struct Board *);
+  Board_Private *_private;
 } Board;
 
-struct Board *Board_Constructor();
-struct Board *Board_Desconstructor();
+Board *Board_Constructor();
+void Board_Desconstructor(Board *);

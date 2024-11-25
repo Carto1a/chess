@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "./board.h"
 #include "./window.h"
 
 const int SDL_FLAGS = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
@@ -17,12 +18,13 @@ struct Window_Private {
   bool resized;
   SDL_Window *window;
   SDL_Surface *surface;
+  Board *board;
 };
 
-void Draw(Window *);
-void Process_Events(Window *);
-void Process_Window_Events(Window *this, SDL_WindowEvent event);
-bool Is_Running(Window *);
+static void Draw(Window *);
+static void Process_Events(Window *);
+static void Process_Window_Events(Window *this, SDL_WindowEvent event);
+static bool Is_Running(Window *);
 
 Window *Window_Construct() {
   SDL_Window *sdl_window = NULL;
@@ -65,6 +67,8 @@ Window *Window_Construct() {
   window->_private->screen_size_previus_y = 0;
   window->_private->running = true;
 
+  window->_private->board = Board_Constructor();
+
   return window;
 }
 
@@ -87,13 +91,15 @@ void Draw(Window *this) {
 
   SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 255, 255, 255));
 
+  this->_private->board->Draw(this->_private->board, surface);
+
   SDL_UpdateWindowSurface(this->_private->window);
 }
 
 void Process_Events(Window *this) {
   SDL_Event event;
   while (SDL_PollEvent(&event) != 0) {
-    printf("Event: %x\n", event.type);
+    /*printf("Event: %x\n", event.type);*/
     switch (event.type) {
     case SDL_QUIT:
       this->_private->running = false;
@@ -110,7 +116,7 @@ void Process_Window_Events(Window *this, SDL_WindowEvent event) {
   switch (event.event) {
   case SDL_WINDOWEVENT_RESIZED:
     this->_private->resized = true;
-    printf("Nova dimensão: %dx%d\n", event.data1, event.data2);
+    /*printf("Nova dimensão: %dx%d\n", event.data1, event.data2);*/
     break;
   }
 }
